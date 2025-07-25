@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Composez votre forfait - Caramel</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    max-width: 500px;
+    margin: 20px auto;
+    background: #FFF9FB;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(232, 62, 140, 0.1);
+  }
+  h1 {
+    color: #E83E8C;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #5A3D4C;
+    margin-bottom: 20px;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #FFD6E0;
+    box-sizing: border-box;
+    transition: all 0.3s;
+  }
+  select:focus {
+    outline: none;
+    border-color: #E83E8C;
+  }
+  #total {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #E83E8C;
+    text-align: center;
+    padding: 10px;
+    background-color: #FFF0F5;
+    border-radius: 8px;
+  }
+  ul {
+    margin-top: 20px;
+    padding-left: 0;
+    list-style-type: none;
+  }
+  ul li {
+    margin-bottom: 8px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  .btn-reset {
+    background: #AAAAAA;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-add {
+    background: #E83E8C;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+  }
+  .btn-whatsapp {
+    background: #25D366;
+    color: white;
+    margin-top: 20px;
+    padding: 15px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  .remove-item {
+    color: #E83E8C;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  optgroup {
+    font-weight: bold;
+    color: #5A3D4C;
+  }
+  option {
+    padding: 5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="package-builder">
+    <h1>Caramel</h1>
+    <p class="subtitle">SALON DE BEAUTÉ</p>
+    
+    <h3 style="color: #5A3D4C; text-align: center;">Composez votre forfait personnalisé</h3>
+    
+    <select id="service-select">
+      <optgroup label="Coiffure">
+        <option value="40">Brushing (40 DH)</option>
+        <option value="90">Brushing + Babylisse (90 DH)</option>
+        <option value="100">Coupe Brushing (100 DH)</option>
+        <option value="250">Coloration (à partir de 250 DH)</option>
+        <option value="350">Balayage Complet (350 DH)</option>
+        <option value="250">Balayage Partiel (250 DH)</option>
+      </optgroup>
+      
+      <optgroup label="Soins Cheveux">
+        <option value="900">Traitement Kératine (900 DH)</option>
+        <option value="900">Traitement Collagène Botox (900 DH)</option>
+        <option value="500">Bain de Kératine (500 DH)</option>
+        <option value="100">Soin de cheveux vapeur (100 DH)</option>
+      </optgroup>
+      
+      <optgroup label="Soins Visage">
+        <option value="200">Soin purifiant médical (200 DH)</option>
+        <option value="300">Soin hydrafacial (300 DH)</option>
+        <option value="400">Soin éclat anti-tâches (400 DH)</option>
+      </optgroup>
+      
+      <optgroup label="Épilation">
+        <option value="30">Sourcils (30 DH)</option>
+        <option value="20">Duvet (20 DH)</option>
+        <option value="100">Visage au fil (100 DH)</option>
+        <option value="80">Visage à la cire (80 DH)</option>
+        <option value="70">Maillot intégral (70 DH)</option>
+      </optgroup>
+      
+      <optgroup label="Beauté Mains & Pieds">
+        <option value="70">Manucure (70 DH)</option>
+        <option value="120">Pédicure (120 DH)</option>
+        <option value="150">Vernis semi-permanent (150 DH)</option>
+      </optgroup>
+      
+      <optgroup label="Massage">
+        <option value="150">Massage relaxant 1h (150 DH)</option>
+        <option value="200">Massage tonifiant (200 DH)</option>
+      </optgroup>
+    </select>
+    
+    <button class="btn-add" onclick="addToPackage()">+ Ajouter ce service</button>
+    <button class="btn-reset" onclick="resetPackage()">Réinitialiser</button>
+    
+    <ul id="package-list"></ul>
+    
+    <div id="total">Total : 0 DH</div>
+    
+    <a href="#" id="whatsapp-link" class="btn-whatsapp">
+      <i class="fab fa-whatsapp"></i> Réserver par WhatsApp
+    </a>
+</div>
+
+<script>
+  let total = 0;
+  let selectedServices = [];
+  const packageList = document.getElementById('package-list');
+  const totalDiv = document.getElementById('total');
+  const serviceSelect = document.getElementById('service-select');
+  const whatsappLink = document.getElementById('whatsapp-link');
+
+  function addToPackage() {
+    const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+    const serviceName = selectedOption.text.split(' (')[0]; // Enlève le prix
+    const servicePrice = parseInt(selectedOption.value);
+    const serviceId = Date.now(); // ID unique pour chaque service
+
+    // Ajouter le service à la liste
+    selectedServices.push({
+      id: serviceId,
+      name: serviceName,
+      price: servicePrice
+    });
+
+    updatePackageDisplay();
+    updateWhatsAppLink();
+  }
+
+  function removeService(id) {
+    selectedServices = selectedServices.filter(service => service.id !== id);
+    updatePackageDisplay();
+    updateWhatsAppLink();
+  }
+
+  function updatePackageDisplay() {
+    // Calculer le total
+    total = selectedServices.reduce((sum, service) => sum + service.price, 0);
+    
+    // Mettre à jour l'affichage
+    packageList.innerHTML = '';
+    selectedServices.forEach(service => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        ${service.name} 
+        <span>${service.price} DH 
+          <span class="remove-item" onclick="removeService(${service.id})">×</span>
+        </span>
+      `;
+      packageList.appendChild(li);
+    });
+    
+    totalDiv.textContent = `Total : ${total} DH`;
+  }
+
+  function updateWhatsAppLink() {
+    if (selectedServices.length > 0) {
+      const servicesText = selectedServices.map(s => `- ${s.name} (${s.price} DH)`).join('%0A');
+      const message = `Bonjour Caramel,%0A%0AJe souhaite réserver le forfait suivant :%0A${servicesText}%0A%0ATotal : ${total} DH`;
+      whatsappLink.href = `https://wa.me/212524312013?text=${encodeURIComponent(message)}`;
+    } else {
+      whatsappLink.href = `https://wa.me/212524312013?text=Bonjour Caramel, je souhaite prendre rendez-vous.`;
+    }
+  }
+
+  function resetPackage() {
+    selectedServices = [];
+    updatePackageDisplay();
+    updateWhatsAppLink();
+  }
+</script>
+
+<!-- Ajout de Font Awesome pour les icônes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</body>
+</html>
